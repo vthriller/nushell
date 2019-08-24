@@ -47,6 +47,7 @@ The following optional features are currently supported:
 
 * **rawkey** - direct keyboard input, which creates a smoother experience in viewing text and binaries
 * **clipboard** - integration with the native clipboard via the `clip` command
+* **git2** - to show current branch in the prompt (default unless compiled with `--no-default-features`)
 
 # Philosophy
 

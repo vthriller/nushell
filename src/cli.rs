@@ -8,6 +8,7 @@ use crate::commands::plugin::{PluginCommand, PluginSink};
 use crate::commands::whole_stream_command;
 use crate::context::Context;
 crate use crate::errors::ShellError;
+#[cfg(feature = "git2")]
 use crate::git::current_branch;
 use crate::object::Value;
 use crate::parser::registry::Signature;
@@ -237,10 +238,15 @@ pub async fn cli() -> Result<(), Box<dyn Error>> {
         let readline = rl.readline(&format!(
             "{}{}> ",
             cwd,
-            match current_branch() {
-                Some(s) => format!("({})", s),
-                None => "".to_string(),
-            }
+            {
+                #[cfg(feature = "git2")]
+                match current_branch() {
+                    Some(s) => format!("({})", s),
+                    None => "".to_string(),
+                }
+                #[cfg(not(feature = "git2"))]
+                ""
+            },
         ));
 
         match process_line(readline, &mut context).await {
